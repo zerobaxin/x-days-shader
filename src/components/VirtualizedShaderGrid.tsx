@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { ShaderCard } from './ShaderCard';
+import { ErrorBoundary } from './ErrorBoundary';
 import { ShaderInfo } from '../data/shaders';
 import { loadShader } from '../lib/shaders';
 
@@ -126,11 +127,13 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
         {shaderData?.loading ? (
           <div className="aspect-video bg-muted animate-pulse rounded-lg" />
         ) : shaderData?.source ? (
-          <ShaderCard
-            key={`${shader.id}-${isVisible ? 'visible' : 'hidden'}-${shaderData.source.substring(0, 50)}`}
-            shader={shader}
-            fragmentShaderSource={shaderData.source}
-          />
+          <ErrorBoundary>
+            <ShaderCard
+              key={`${shader.id}-${isVisible ? 'visible' : 'hidden'}-${shaderData.source.substring(0, 50)}`}
+              shader={shader}
+              fragmentShaderSource={shaderData.source}
+            />
+          </ErrorBoundary>
         ) : (
           <div className="aspect-video bg-muted animate-pulse rounded-lg" />
         )}

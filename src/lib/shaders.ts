@@ -46,6 +46,7 @@ import PulsatingLattice from '../shaders/PulsatingLattice.frag'
 import LatticeSynapse from '../shaders/LatticeSynapse.frag'
 import MorphingCyberShard from '../shaders/MorphingCyberShard.frag'
 import DeformingHexGridSphere from '../shaders/DeformingHexGridSphere.frag'
+import Krystalos from '../shaders/Krystalos.frag'
 import BinaryDance from '../shaders/BinaryDance.frag'
 import fractal001 from '../shaders/fractal001.frag'
 import fractal002 from '../shaders/fractal002.frag'
@@ -117,6 +118,7 @@ const shaderMap: Record<string, string> = {
   'LatticeSynapse.frag': LatticeSynapse,
   'MorphingCyberShard.frag': MorphingCyberShard,
   'DeformingHexGridSphere.frag': DeformingHexGridSphere,
+  'Krystalos.frag': Krystalos,
   'BinaryDance.frag': BinaryDance,
   'fractal001.frag': fractal001,
   'fractal002.frag': fractal002,

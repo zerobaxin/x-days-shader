@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as THREE from 'three';
 import { Card, CardContent } from './ui/card';
@@ -16,6 +16,7 @@ export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSo
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const clockRef = useRef<THREE.Clock>(new THREE.Clock());
+  const [webglError, setWebglError] = useState(false);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -38,12 +39,20 @@ export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSo
 
 
     const canvas = canvasRef.current;
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: false, // Disable for performance in preview
-      alpha: false,
-      powerPreference: "high-performance"
-    });
+    let renderer: THREE.WebGLRenderer;
+
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: false, // Disable for performance in preview
+        alpha: false,
+        powerPreference: "high-performance"
+      });
+    } catch (error) {
+      console.error(`Error creating WebGL context for ${shader.name}:`, error);
+      setWebglError(true);
+      return;
+    }
 
     renderer.setPixelRatio(0.75); // Even lower pixel ratio for preview cards
 
@@ -151,6 +160,63 @@ export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSo
       material.dispose();
     };
   }, [fragmentShaderSource]);
+
+  // Show fallback UI if WebGL failed
+  if (webglError) {
+    return (
+      <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-glow-primary hover:scale-[1.02] group">
+        <Link to={`/shader/${shader.id}`} className="block">
+          <div className="aspect-video relative overflow-hidden bg-muted flex items-center justify-center">
+            <div className="text-center text-muted-foreground">
+              <div className="text-2xl mb-2">⚠️</div>
+              <div className="text-sm">WebGL not supported</div>
+            </div>
+          </div>
+
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+              {shader.name}
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+              {shader.description}
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {shader.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="text-xs"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+
+            {shader.author && (
+              <p className="text-xs text-muted-foreground mt-3">
+                by {shader.author}
+              </p>
+            )}
+          </CardContent>
+        </Link>
+
+        {/* ShaderToy link outside the Link wrapper */}
+        {shader.shaderToyId && (
+          <div className="px-6 pb-6">
+            <a
+              href={`https://www.shadertoy.com/view/${shader.shaderToyId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              View on ShaderToy
+            </a>
+          </div>
+        )}
+      </Card>
+    );
+  }
 
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-glow-primary hover:scale-[1.02] group">

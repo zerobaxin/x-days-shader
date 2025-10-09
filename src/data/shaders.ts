@@ -661,4 +661,14 @@ export const shaders: ShaderInfo[] = [
     tags: ['morphing', 'capsule', 'rain', 'raymarching', '3d', 'sdf'],
     shaderToyId: '3cXfDn',
   },
+  {
+    id: 'WXfyRl',
+    name: 'Krystalos',
+    description:
+      'This shader features a procedurally generated abstract shape that constantly shifts and evolves. Its surface glitters with crystalline light, an effect achieved using ray marching and noise functions to create the look of a digital organism or a cluster of cosmic dust.',
+    fragmentShader: 'Krystalos.frag',
+    author: 'koji',
+    tags: ['points', '3d', 'noise'],
+    shaderToyId: 'WXfyRl',
+  },
 ]
