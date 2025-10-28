@@ -5,11 +5,23 @@ import { vertexShader } from '../lib/shaders';
 interface ShaderCanvasProps {
   className?: string;
   fragmentShader?: string;
+  videoSrc?: string;
+  pixelRatio?: number; // Custom pixel ratio (default: auto-detect, max 1.5)
+  width?: number; // Fixed width in pixels (default: auto)
+  height?: number; // Fixed height in pixels (default: auto)
+  videoWidth?: number; // Video element width (affects texture quality)
+  videoHeight?: number; // Video element height (affects texture quality)
 }
 
 export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
   className = '',
-  fragmentShader: fragmentShaderProp
+  fragmentShader: fragmentShaderProp,
+  videoSrc,
+  pixelRatio,
+  width,
+  height,
+  videoWidth,
+  videoHeight
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -19,6 +31,8 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
   const clockRef = useRef<THREE.Clock>(new THREE.Clock());
   const [defaultFragmentShader, setDefaultFragmentShader] = useState<string>('');
   const mouseRef = useRef<THREE.Vector4>(new THREE.Vector4(0, 0, 0, 0));
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoTextureRef = useRef<THREE.VideoTexture | null>(null);
 
   // Load default shader if none provided
   // useEffect(() => {
@@ -42,8 +56,9 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
       powerPreference: "high-performance" // Request high-performance GPU
     });
 
-    // Set lower pixel ratio for better performance
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    // Set pixel ratio (custom or auto-detect with max 1.5)
+    const effectivePixelRatio = pixelRatio ?? Math.min(window.devicePixelRatio, 1.5);
+    renderer.setPixelRatio(effectivePixelRatio);
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -51,12 +66,41 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     // Create fullscreen quad geometry
     const geometry = new THREE.PlaneGeometry(2, 2);
 
+    // Create video texture if video source is provided
+    let videoTexture: THREE.VideoTexture | null = null;
+    if (videoSrc) {
+      const video = document.createElement('video');
+      video.src = videoSrc;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.crossOrigin = 'anonymous';
+
+      // Set custom video dimensions if provided
+      if (videoWidth) video.width = videoWidth;
+      if (videoHeight) video.height = videoHeight;
+
+      // Play video
+      video.play().catch((error) => {
+        console.error('Error playing video:', error);
+      });
+
+      videoTexture = new THREE.VideoTexture(video);
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+      videoTexture.format = THREE.RGBAFormat;
+
+      videoRef.current = video;
+      videoTextureRef.current = videoTexture;
+    }
+
     // Create shader material
     const material = new THREE.ShaderMaterial({
       uniforms: {
         iTime: { value: 0 },
         iResolution: { value: new THREE.Vector3() },
-        iMouse: { value: mouseRef.current }
+        iMouse: { value: mouseRef.current },
+        iChannel0: { value: videoTexture }
       },
       vertexShader,
       fragmentShader
@@ -75,12 +119,21 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     const handleResize = () => {
       if (!renderer || !material) return;
 
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
+      // Use custom dimensions if provided, otherwise use canvas bounding rect
+      let canvasWidth: number;
+      let canvasHeight: number;
 
-      renderer.setSize(width, height, false);
-      material.uniforms.iResolution.value.set(width, height, 1);
+      if (width && height) {
+        canvasWidth = width;
+        canvasHeight = height;
+      } else {
+        const rect = canvas.getBoundingClientRect();
+        canvasWidth = rect.width;
+        canvasHeight = rect.height;
+      }
+
+      renderer.setSize(canvasWidth, canvasHeight, false);
+      material.uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);
     };
 
     // Initial resize
@@ -141,27 +194,41 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
 
     animate();
 
-    // Set up resize observer
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(canvas);
+    // Set up resize observer (only if not using fixed dimensions)
+    let resizeObserver: ResizeObserver | null = null;
+    if (!width || !height) {
+      resizeObserver = new ResizeObserver(handleResize);
+      resizeObserver.observe(canvas);
+    }
 
     // Cleanup
     return () => {
-      resizeObserver.disconnect();
+      resizeObserver?.disconnect();
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mouseup', handleMouseUp);
+
+      // Clean up video
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+        videoRef.current = null;
+      }
+      if (videoTextureRef.current) {
+        videoTextureRef.current.dispose();
+        videoTextureRef.current = null;
+      }
+
       renderer?.dispose();
       geometry.dispose();
       material.dispose();
     };
-  }, [fragmentShaderProp, defaultFragmentShader]);
+  }, [fragmentShaderProp, defaultFragmentShader, videoSrc, pixelRatio, width, height, videoWidth, videoHeight]);
 
   return (
     <canvas
       ref={canvasRef}
       className={`block w-full h-full ${className}`}
-      style={{ display: 'block' }}
     />
   );
 };

@@ -48,6 +48,7 @@ import MorphingCyberShard from '../shaders/MorphingCyberShard.frag'
 import DeformingHexGridSphere from '../shaders/DeformingHexGridSphere.frag'
 import Krystalos from '../shaders/Krystalos.frag'
 import BinaryDance from '../shaders/BinaryDance.frag'
+import EightBitGroove from '../shaders/8-bitGroove.frag'
 import fractal001 from '../shaders/fractal001.frag'
 import fractal002 from '../shaders/fractal002.frag'
 import fractal003 from '../shaders/fractal003.frag'
@@ -120,6 +121,7 @@ const shaderMap: Record<string, string> = {
   'DeformingHexGridSphere.frag': DeformingHexGridSphere,
   'Krystalos.frag': Krystalos,
   'BinaryDance.frag': BinaryDance,
+  '8-bitGroove.frag': EightBitGroove,
   'fractal001.frag': fractal001,
   'fractal002.frag': fractal002,
   'fractal003.frag': fractal003,

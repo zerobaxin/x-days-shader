@@ -7,6 +7,7 @@ export interface ShaderInfo {
   tags: string[]
   thumbnail?: string
   shaderToyId?: string
+  requiresVideo?: boolean
 }
 
 export const shaders: ShaderInfo[] = [
@@ -670,5 +671,16 @@ export const shaders: ShaderInfo[] = [
     author: 'koji',
     tags: ['points', '3d', 'noise'],
     shaderToyId: 'WXfyRl',
+  },
+  {
+    id: 'WXsfDH',
+    name: '8-bit Groove',
+    description:
+      'A halftone dot-matrix effect that samples video brightness and creates retro 8-bit style dots. The effect creates a mesmerizing transformation from video to abstract dot patterns.',
+    fragmentShader: '8-bitGroove.frag',
+    author: 'koji',
+    tags: ['video', 'halftone', '8bit', 'dots'],
+    shaderToyId: 'WXsfDH',
+    requiresVideo: true,
   },
 ]

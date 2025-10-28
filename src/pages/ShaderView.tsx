@@ -8,11 +8,13 @@ import { ArrowLeft, Home } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useFPS } from '../hooks/use-fps';
 import { loadShader } from '../lib/shaders';
+import testVideo from '../assets/video/shader_test.mp4';
 
 const ShaderViewContent: React.FC = () => {
   const { shaderId } = useParams<{ shaderId: string }>();
   const { theme, toggleTheme } = useTheme();
   const [shaderSource, setShaderSource] = useState<string>('');
+  const [videoSrc, setVideoSrc] = useState<string>('');
   const fps = useFPS();
 
   const shader = shaders.find(s => s.id === shaderId);
@@ -36,6 +38,13 @@ const ShaderViewContent: React.FC = () => {
         `);
       }
     };
+
+    // Load video if shader requires it
+    if (shader.requiresVideo) {
+      setVideoSrc(testVideo);
+    } else {
+      setVideoSrc('');
+    }
 
     loadShaderSource();
   }, [shader]);
@@ -63,7 +72,13 @@ const ShaderViewContent: React.FC = () => {
     <div className="relative w-screen h-screen overflow-hidden bg-background">
       {/* Full-screen shader canvas */}
       <div className="absolute inset-0">
-        <ShaderCanvas fragmentShader={shaderSource} />
+        <ShaderCanvas
+          height={1280}
+          width={640}
+          pixelRatio={1.0}
+          fragmentShader={shaderSource}
+          videoSrc={videoSrc || undefined}
+        />
       </div>
 
       {/* UI Overlay */}
