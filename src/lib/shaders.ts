@@ -72,6 +72,8 @@ import movingTetrahedron from '../shaders/movingTetrahedron.frag'
 import raymarching035 from '../shaders/raymarching035.frag'
 import movingTorus from '../shaders/movingTorus.frag'
 import movintOctahedronTorus from '../shaders/movintOctahedronTorus.frag'
+import VoronoiCrystalGrowth from '../shaders/VoronoiCrystalGrowth.frag'
+import HolographicIridescence from '../shaders/HolographicIridescence.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -145,6 +147,8 @@ const shaderMap: Record<string, string> = {
   'raymarching035.frag': raymarching035,
   'movingTorus.frag': movingTorus,
   'movintOctahedronTorus.frag': movintOctahedronTorus,
+  'VoronoiCrystalGrowth.frag': VoronoiCrystalGrowth,
+  'HolographicIridescence.frag': HolographicIridescence,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {

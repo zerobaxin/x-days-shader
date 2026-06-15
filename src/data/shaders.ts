@@ -683,4 +683,21 @@ export const shaders: ShaderInfo[] = [
     shaderToyId: 'WXsfDH',
     requiresVideo: true,
   },
+  {
+    id: 'VCG001',
+    name: 'Voronoi Crystal Growth',
+    description:
+      'Organic crystal structures emerge from a pulsating Voronoi tessellation. Glowing cell edges and shifting diagonal facets create the illusion of a living crystal lattice that breathes and rotates in space.',
+    fragmentShader: 'VoronoiCrystalGrowth.frag',
+    author: 'dora',
+    tags: ['voronoi', 'crystal', '2d', 'procedural', 'organic'],
+  },
+  {
+    id: 'XDS043',
+    name: 'Holographic Iridescence',
+    description: 'A flowing iridescent surface simulating thin-film interference. Multiple noise-driven layers of optical path difference produce rainbow color shifts that dance with viewing angle, while specular highlights and rim lighting give it a luminous, holographic depth.',
+    fragmentShader: 'HolographicIridescence.frag',
+    author: 'dora',
+    tags: ['holographic', 'iridescent', 'interference', '2d', 'procedural'],
+  },
 ]
