@@ -700,4 +700,20 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['holographic', 'iridescent', 'interference', '2d', 'procedural'],
   },
+  {
+    id: 'XDS044',
+    name: 'Chromatic Wave Pool',
+    description: 'Interference patterns from drifting wave sources create rippling chromatic fringes. Each RGB channel uses a slightly different frequency, simulating thin-film dispersion, while squared-amplitude intensity mapping and an exponential tone curve produce vivid constructive/destructive interference bands across the surface.',
+    fragmentShader: 'ChromaticWavePool.frag',
+    author: 'dora',
+    tags: ['interference', 'waves', 'chromatic', '2d', 'procedural'],
+  },
+  {
+    id: 'XDS045',
+    name: 'Neon Corridor',
+    description: 'An infinite tunnel flight through a hexagonal neon corridor. Concentric hex ring layers with shifting neon colors rush past the camera, while corner accent lights, speed-line streaks, and a central headlight glow create depth and atmosphere. A secondary ring layer at different spacing produces moiré-like overlapping depth.',
+    fragmentShader: 'NeonCorridor.frag',
+    author: 'dora',
+    tags: ['tunnel', 'neon', 'hexagonal', '2d', 'procedural'],
+  },
 ]
