@@ -716,4 +716,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['tunnel', 'neon', 'hexagonal', '2d', 'procedural'],
   },
+  {
+    id: 'XDS046',
+    name: 'Digital Rain',
+    description: 'Cascading matrix-style glyph columns rain down the screen in two depth layers. Each column scrolls at its own speed with a bright white-cyan head that fades into a green tail. A secondary denser layer adds depth, while a faint background grid hints at the digital substrate beneath.',
+    fragmentShader: 'DigitalRain.frag',
+    author: 'dora',
+    tags: ['digital-rain', 'matrix', 'glyphs', '2d', 'procedural'],
+  },
 ]

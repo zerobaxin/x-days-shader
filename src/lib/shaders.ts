@@ -76,6 +76,7 @@ import VoronoiCrystalGrowth from '../shaders/VoronoiCrystalGrowth.frag'
 import HolographicIridescence from '../shaders/HolographicIridescence.frag'
 import ChromaticWavePool from '../shaders/ChromaticWavePool.frag'
 import NeonCorridor from '../shaders/NeonCorridor.frag'
+import DigitalRain from '../shaders/DigitalRain.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -153,6 +154,7 @@ const shaderMap: Record<string, string> = {
   'HolographicIridescence.frag': HolographicIridescence,
   'ChromaticWavePool.frag': ChromaticWavePool,
   'NeonCorridor.frag': NeonCorridor,
+  'DigitalRain.frag': DigitalRain,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
