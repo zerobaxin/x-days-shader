@@ -724,4 +724,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['digital-rain', 'matrix', 'glyphs', '2d', 'procedural'],
   },
+  {
+    id: 'XDS047',
+    name: 'Sacred Mandala',
+    description: 'A meditative rotating mandala built from layered sacred geometry. Six concentric rings of petals with increasing symmetry (4- to 14-fold) counter-rotate at different speeds, while dashed radial spokes, star polygons, and a Seed-of-Life dot ring add depth and detail. A breathing pulse animates the whole structure, and a warm gold-to-violet color gradient transitions across the rings.',
+    fragmentShader: 'SacredMandala.frag',
+    author: 'dora',
+    tags: ['mandala', 'sacred-geometry', 'kaleidoscope', '2d', 'procedural'],
+  },
 ]

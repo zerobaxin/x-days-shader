@@ -1,155 +1,151 @@
-// Sacred Mandala — layered rotational symmetry in polar coordinates
-// Nested rings of petals, dots, and geometric arms rotate at different speeds.
-// A radial pulse breathes life into the pattern. Colors shift through a
-// jewel-toned palette (gold, ruby, emerald, sapphire) mapped to angle and radius.
+// SacredMandala.frag — Rotating mandala with layered sacred geometry
+// Concentric rings of petals, seeds, and star polygons overlap
+// with phase offsets, breathed by a slow pulse. Radial symmetry
+// and rotational animation create a meditative, kaleidoscopic effect.
 
 uniform float iTime;
 uniform vec3 iResolution;
 
-// Simple hash for sparkle noise
-float hash21(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
-    return fract(p.x * p.y);
+// Simple hash for pseudo-random variation per ring
+float hash(float n) {
+  return fract(sin(n * 127.1) * 43758.5453);
 }
 
-// Smooth sawtooth: repeats 0→1 in [0, period)
-float saw(float x, float period) {
-    return fract(x / period);
+// 2D rotation matrix
+mat2 rot(float a) {
+  float c = cos(a), s = sin(a);
+  return mat2(c, -s, s, c);
 }
 
-// Signed distance to a line segment (2D)
-float sdSegment(vec2 p, vec2 a, vec2 b) {
-    vec2 pa = p - a, ba = b - a;
-    float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-    return length(pa - ba * h);
+// Signed distance for a petal shape (elongated teardrop)
+float petal(vec2 p, float w, float h) {
+  p.x = abs(p.x);
+  // Implicit curve: x^2 narrows toward tip
+  float d = length(p * vec2(1.0 / max(w, 0.001), 1.0 / max(h, 0.001)));
+  return smoothstep(1.0, 0.95, d);
+}
+
+// Star polygon: N points, sharpness control
+float star(vec2 p, int n, float sharp) {
+  float a = atan(p.y, p.x);
+  float r = length(p);
+  float seg = 6.28318 / float(n);
+  float d = cos(floor(0.5 + a / seg) * seg - a) * r;
+  return smoothstep(sharp + 0.02, sharp - 0.02, d);
 }
 
 void main() {
-    vec2 uv = (2.0 * gl_FragCoord.xy - iResolution.xy) / iResolution.y;
-    float r = length(uv);
-    float a = atan(uv.y, uv.x); // -PI..PI
+  vec2 uv = (2.0 * gl_FragCoord.xy - iResolution.xy) / iResolution.y;
+  float t = iTime * 0.15;
 
-    float t = iTime * 0.3;
+  // Polar coordinates
+  float r = length(uv);
+  float a = atan(uv.y, uv.x);
 
-    vec3 col = vec3(0.0);
+  vec3 col = vec3(0.0);
 
-    // Background: deep dark indigo fading to black at edges
-    col += vec3(0.02, 0.01, 0.05) * exp(-r * 2.0);
+  // Breathing pulse
+  float pulse = 0.85 + 0.15 * sin(iTime * 0.5);
 
-    // ---- Rotational symmetry helper ----
-    // Returns pattern that repeats N times around the circle
-    // angle: 0..1 within each slice
-    float sym(float angle, float N, float offset) {
-        return abs(fract(angle * N / 6.2831853 + offset) - 0.5) * 2.0;
-    }
+  // --- Ring layers: each at a different radius with unique symmetry ---
+  for (int i = 0; i < 6; i++) {
+    float fi = float(i);
+    float ringR = 0.12 + fi * 0.16; // radial position of ring
+    float nSym = 4.0 + fi * 2.0;     // petals: 4,6,8,10,12,14
+    float rotSpeed = (mod(fi, 2.0) < 0.5 ? 1.0 : -1.0) * (0.3 + fi * 0.08);
+    float rotAngle = t * rotSpeed + fi * 0.618;
 
-    // ---- Ring 1: Outer petal ring (8-fold) ----
-    {
-        float N = 8.0;
-        float s = sym(a, N, t * 0.1);
-        // Petal shape: wide at base, narrow at tip
-        float petal = smoothstep(0.0, 0.15, s) * smoothstep(0.9, 0.3, s);
-        // Radial envelope: ring between r=0.6 and r=0.85
-        float env = smoothstep(0.58, 0.62, r) * smoothstep(0.88, 0.82, r);
-        float glow = petal * env;
-        vec3 c = mix(vec3(0.85, 0.65, 0.1), vec3(1.0, 0.3, 0.2), s);
-        col += c * glow * 0.7;
-    }
+    // Repeated angle within symmetry group
+    float segA = 6.28318 / nSym;
+    float repA = mod(a - rotAngle, segA) - segA * 0.5;
 
-    // ---- Ring 2: Spoked wheel (12-fold) ----
-    {
-        float N = 12.0;
-        float s = sym(a, N, -t * 0.15);
-        // Thin spokes
-        float spoke = smoothstep(0.05, 0.0, s) * 0.6;
-        // Radial: from center out to 0.75
-        float env = smoothstep(0.05, 0.15, r) * smoothstep(0.78, 0.72, r);
-        float glow = spoke * env;
-        vec3 c = vec3(0.9, 0.8, 0.3); // gold
-        col += c * glow;
-    }
+    // Radial profile: thin ring band
+    float ringDist = abs(r - ringR * pulse);
+    float band = smoothstep(0.025, 0.005, ringDist);
 
-    // ---- Ring 3: Diamond dots (16-fold) ----
-    {
-        float N = 16.0;
-        float s = sym(a, N, t * 0.05);
-        // Dot at center of each slice
-        float dot = smoothstep(0.08, 0.02, s);
-        // Place dots in a ring at r = 0.5
-        float env = exp(-80.0 * (r - 0.5) * (r - 0.5));
-        float pulse = 0.8 + 0.2 * sin(t * 3.0 + s * 6.28);
-        float glow = dot * env * pulse;
-        vec3 c = vec3(0.3, 0.9, 0.6); // emerald
-        col += c * glow * 0.9;
-    }
+    // Petal shape within the angle slice
+    vec2 local = vec2(repA, r - ringR * pulse);
+    local *= rot(-rotAngle * 0.3);
+    float pLen = 0.03 + fi * 0.004;
+    float pWid = pLen * 0.35;
+    float petalShape = petal(local, pWid, pLen);
+    float petalMask = band * petalShape * (0.6 + 0.4 * sin(fi * 1.7 + iTime * 0.4));
 
-    // ---- Ring 4: Inner flower (6-fold) ----
-    {
-        float N = 6.0;
-        float s = sym(a, N, -t * 0.2);
-        // Broad petals
-        float petal = smoothstep(0.0, 0.25, s) * smoothstep(1.0, 0.25, s);
-        float env = smoothstep(0.12, 0.18, r) * smoothstep(0.42, 0.35, r);
-        float glow = petal * env;
-        vec3 c = mix(vec3(0.2, 0.4, 0.9), vec3(0.6, 0.2, 0.8), 0.5 + 0.5 * sin(t + r * 4.0));
-        col += c * glow * 0.8;
-    }
+    // Color: warm gold → cool violet gradient per ring
+    float hue = fi * 0.12 + 0.08 * sin(iTime * 0.3 + fi);
+    vec3 ringCol = 0.55 + 0.45 * cos(6.28318 * (hue + vec3(0.0, 0.33, 0.67)));
+    // Boost brightness for inner rings
+    ringCol *= 1.0 + 0.3 * (1.0 - fi / 6.0);
 
-    // ---- Ring 5: Tiny accent dots (24-fold) at r=0.88 ----
-    {
-        float N = 24.0;
-        float s = sym(a, N, -t * 0.08);
-        float dot = smoothstep(0.06, 0.01, s);
-        float env = exp(-120.0 * (r - 0.88) * (r - 0.88));
-        float glow = dot * env;
-        vec3 c = vec3(1.0, 0.9, 0.7); // warm white
-        col += c * glow * 0.5;
-    }
+    col += ringCol * petalMask;
+  }
 
-    // ---- Central glowing orb ----
-    {
-        float pulse = 0.8 + 0.2 * sin(t * 2.5);
-        float orb = exp(-18.0 * r * r) * pulse;
-        vec3 c = mix(vec3(1.0, 0.85, 0.5), vec3(0.9, 0.5, 1.0), 0.5 + 0.5 * sin(t * 1.5));
-        col += c * orb;
-    }
+  // --- Radial spokes (dashed lines) ---
+  int nSpokes = 12;
+  for (int i = 0; i < 12; i++) {
+    float fi = float(i);
+    float spokeA = 6.28318 / 12.0 * fi + t * 0.1;
+    float angleDist = abs(sin(a - spokeA));
+    float spokeLine = smoothstep(0.04, 0.005, angleDist * r);
+    // Dashes along the spoke
+    float dash = smoothstep(0.5, 0.45, fract(r * 12.0 - iTime * 0.2));
+    float spoke = spokeLine * dash;
 
-    // ---- Connecting arcs between rings (8-fold) ----
-    {
-        float N = 8.0;
-        float s = sym(a, N, t * 0.1);
-        // Thin arc bands
-        float arc = smoothstep(0.03, 0.0, abs(s)) * 0.3;
-        float env = smoothstep(0.35, 0.4, r) * smoothstep(0.6, 0.55, r);
-        float glow = arc * env;
-        vec3 c = vec3(0.7, 0.6, 1.0); // lavender
-        col += c * glow;
-    }
+    // Fading with distance
+    spoke *= smoothstep(1.1, 0.15, r);
 
-    // ---- Radial pulse ring expanding outward ----
-    {
-        float phase = fract(t * 0.4);
-        float ringR = phase * 1.1;
-        float ring = exp(-300.0 * (r - ringR) * (r - ringR));
-        float fade = 1.0 - phase; // fades as it expands
-        vec3 c = vec3(0.9, 0.75, 0.4) * ring * fade * 0.35;
-        col += c;
-    }
+    vec3 spokeCol = vec3(0.9, 0.85, 0.7) * 0.3;
+    col += spokeCol * spoke;
+  }
 
-    // ---- Sparkle overlay ----
-    {
-        float sparkle = hash21(floor(uv * 40.0) + floor(t * 4.0));
-        sparkle = smoothstep(0.97, 1.0, sparkle) * exp(-r * 1.5);
-        col += vec3(1.0) * sparkle * 0.5;
-    }
+  // --- Central star polygon ---
+  {
+    float starR = 0.08 + 0.01 * sin(iTime * 0.7);
+    vec2 sp = uv * rot(t * 0.5);
+    float s = star(sp, 6, starR);
+    float fade = smoothstep(0.2, 0.0, r);
+    vec3 starCol = vec3(1.0, 0.95, 0.85) * s * fade * 0.7;
+    col += starCol;
+  }
 
-    // ---- Outer vignette ----
-    col *= 1.0 - smoothstep(0.7, 1.2, r);
+  // --- Outer star polygon (counter-rotating) ---
+  {
+    float starR2 = 0.3 + 0.02 * sin(iTime * 0.35);
+    vec2 sp2 = uv * rot(-t * 0.3);
+    float s2 = star(sp2, 12, starR2);
+    float mask = smoothstep(0.35, 0.25, r) * smoothstep(0.1, 0.2, r);
+    vec3 s2Col = vec3(0.7, 0.6, 0.9) * s2 * mask * 0.4;
+    col += s2Col;
+  }
 
-    // Tone-map (simple Reinhard) + gamma
-    col = col / (1.0 + col);
-    col = pow(col, vec3(0.9));
+  // --- Eye of Providence (concentric glowing rings at center) ---
+  for (int i = 0; i < 3; i++) {
+    float fi = float(i);
+    float eyeR = 0.015 + fi * 0.02;
+    float eye = smoothstep(eyeR + 0.005, eyeR, r) - smoothstep(eyeR - 0.003, eyeR - 0.008, r);
+    float pulse2 = 0.8 + 0.2 * sin(iTime * 1.0 + fi * 2.0);
+    vec3 eyeCol = vec3(1.0, 0.9, 0.7) * eye * pulse2;
+    col += eyeCol;
+  }
 
-    gl_FragColor = vec4(col, 1.0);
+  // --- Outer boundary circle ---
+  float outerRing = smoothstep(0.005, 0.0, abs(r - 1.0 * pulse)) * 0.4;
+  col += vec3(0.6, 0.55, 0.8) * outerRing;
+
+  // --- Seed-of-life dot ring (tiny circles at vertices) ---
+  for (int i = 0; i < 6; i++) {
+    float fi = float(i);
+    float dotA = 6.28318 / 6.0 * fi + t * 0.2;
+    vec2 dotPos = vec2(cos(dotA), sin(dotA)) * 0.35 * pulse;
+    float dot = smoothstep(0.012, 0.006, length(uv - dotPos));
+    col += vec3(0.95, 0.9, 0.75) * dot * 0.6;
+  }
+
+  // Vignette
+  col *= 1.0 - 0.4 * smoothstep(0.6, 1.1, r);
+
+  // Slight background glow
+  col += vec3(0.02, 0.015, 0.03) * (1.0 - smoothstep(0.0, 1.1, r));
+
+  gl_FragColor = vec4(col, 1.0);
 }

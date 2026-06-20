@@ -77,6 +77,7 @@ import HolographicIridescence from '../shaders/HolographicIridescence.frag'
 import ChromaticWavePool from '../shaders/ChromaticWavePool.frag'
 import NeonCorridor from '../shaders/NeonCorridor.frag'
 import DigitalRain from '../shaders/DigitalRain.frag'
+import SacredMandala from '../shaders/SacredMandala.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -155,6 +156,7 @@ const shaderMap: Record<string, string> = {
   'ChromaticWavePool.frag': ChromaticWavePool,
   'NeonCorridor.frag': NeonCorridor,
   'DigitalRain.frag': DigitalRain,
+  'SacredMandala.frag': SacredMandala,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
