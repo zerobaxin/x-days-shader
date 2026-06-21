@@ -732,4 +732,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['mandala', 'sacred-geometry', 'kaleidoscope', '2d', 'procedural'],
   },
+  {
+    id: 'XDS048',
+    name: 'Ink Drop Vortex',
+    description: 'Swirling ink-in-water simulation driven by curl noise velocity fields. Four colored ink drops orbit and pulse while a divergence-free flow field advects them into stretched filaments. Multi-layer semi-Lagrangian advection creates depth, and vorticity accent lines highlight shear zones with faint luminous streaks.',
+    fragmentShader: 'InkDropVortex.frag',
+    author: 'dora',
+    tags: ['fluid', 'curl-noise', 'advection', 'ink', '2d', 'procedural'],
+  },
 ]
