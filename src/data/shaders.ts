@@ -740,4 +740,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['fluid', 'curl-noise', 'advection', 'ink', '2d', 'procedural'],
   },
+  {
+    id: 'XDS049',
+    name: 'Aurora Borealis',
+    description: 'Procedural northern lights with three layered FBM curtain bands that shimmer and shift across a starlit night sky. Each curtain maps height to a spectral gradient (green→cyan→magenta→violet), while high-frequency vertical streaks add a delicate shimmer. A subtle star field and horizon glow complete the atmospheric scene.',
+    fragmentShader: 'AuroraBorealis.frag',
+    author: 'dora',
+    tags: ['aurora', 'atmospheric', 'fbm', 'curtain', '2d', 'procedural'],
+  },
 ]
