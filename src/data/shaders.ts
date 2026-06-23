@@ -748,4 +748,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['aurora', 'atmospheric', 'fbm', 'curtain', '2d', 'procedural'],
   },
+  {
+    id: 'XDS050',
+    name: 'Islamic Zillij',
+    description: 'A 10-fold star-and-polygon rosette in the Moroccan zillij tradition. Rotational folding maps UV into a single 36° wedge; distance-to-edge checks draw the interlocking 10-pointed star and convex kite fills. Over/under weave shading with a sand-gold-to-teal palette and a breathing scale pulse give the tile a living, handcrafted feel.',
+    fragmentShader: 'IslamicZillij.frag',
+    author: 'dora',
+    tags: ['islamic', 'geometric', 'zillij', 'rosette', '2d', 'procedural'],
+  },
 ]

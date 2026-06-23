@@ -80,6 +80,7 @@ import DigitalRain from '../shaders/DigitalRain.frag'
 import SacredMandala from '../shaders/SacredMandala.frag'
 import InkDropVortex from '../shaders/InkDropVortex.frag'
 import AuroraBorealis from '../shaders/AuroraBorealis.frag'
+import IslamicZillij from '../shaders/IslamicZillij.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -161,6 +162,7 @@ const shaderMap: Record<string, string> = {
   'SacredMandala.frag': SacredMandala,
   'InkDropVortex.frag': InkDropVortex,
   'AuroraBorealis.frag': AuroraBorealis,
+  'IslamicZillij.frag': IslamicZillij,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
