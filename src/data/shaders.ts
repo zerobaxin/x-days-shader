@@ -756,4 +756,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['islamic', 'geometric', 'zillij', 'rosette', '2d', 'procedural'],
   },
+  {
+    id: 'XDS051',
+    name: 'Moiré Phantom',
+    description: 'Ghostly Moiré arcs bloom and drift from three counter-rotating radial fan gratings. Multiplying the spoke layers produces bright phantom fringes that only exist as interference, while partial double-overlap adds softer secondary fringes. A concentric ring wave modulates the phantom intensity, and a slowly rotating colour wheel tints the arcs with shifting spectral hues.',
+    fragmentShader: 'MoirePhantom.frag',
+    author: 'dora',
+    tags: ['moiré', 'optical-illusion', 'interference', 'radial', '2d', 'procedural'],
+  },
 ]
