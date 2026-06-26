@@ -764,4 +764,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['moiré', 'optical-illusion', 'interference', 'radial', '2d', 'procedural'],
   },
+  {
+    id: 'XDS052',
+    name: 'Plasma Metaballs',
+    description: 'Lava-lamp-style plasma metaballs drifting on Lissajous orbits. Seven soft-minimum distance blobs blend and merge, then a spectral cosine palette with phase-shifted layering paints the isodistance contours in vivid rainbow fringes. A high-frequency noise overlay and a radial breathing pulse add fine detail and atmosphere.',
+    fragmentShader: 'PlasmaMetaballs.frag',
+    author: 'dora',
+    tags: ['plasma', 'metaballs', 'spectral', '2d', 'procedural'],
+  },
 ]

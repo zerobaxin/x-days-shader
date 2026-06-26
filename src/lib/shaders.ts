@@ -82,6 +82,7 @@ import InkDropVortex from '../shaders/InkDropVortex.frag'
 import AuroraBorealis from '../shaders/AuroraBorealis.frag'
 import IslamicZillij from '../shaders/IslamicZillij.frag'
 import MoirePhantom from '../shaders/MoirePhantom.frag'
+import PlasmaMetaballs from '../shaders/PlasmaMetaballs.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -165,6 +166,7 @@ const shaderMap: Record<string, string> = {
   'AuroraBorealis.frag': AuroraBorealis,
   'IslamicZillij.frag': IslamicZillij,
   'MoirePhantom.frag': MoirePhantom,
+  'PlasmaMetaballs.frag': PlasmaMetaballs,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
