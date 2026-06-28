@@ -83,6 +83,8 @@ import AuroraBorealis from '../shaders/AuroraBorealis.frag'
 import IslamicZillij from '../shaders/IslamicZillij.frag'
 import MoirePhantom from '../shaders/MoirePhantom.frag'
 import PlasmaMetaballs from '../shaders/PlasmaMetaballs.frag'
+import PrimordialGrid from '../shaders/PrimordialGrid.frag'
+import SpiralNebula from '../shaders/SpiralNebula.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -167,6 +169,8 @@ const shaderMap: Record<string, string> = {
   'IslamicZillij.frag': IslamicZillij,
   'MoirePhantom.frag': MoirePhantom,
   'PlasmaMetaballs.frag': PlasmaMetaballs,
+  'PrimordialGrid.frag': PrimordialGrid,
+  'SpiralNebula.frag': SpiralNebula,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {

@@ -772,4 +772,20 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['plasma', 'metaballs', 'spectral', '2d', 'procedural'],
   },
+  {
+    id: 'XDS053',
+    name: 'Primordial Grid',
+    description: 'A stateless cellular automata shader that computes Conway-like Game of Life generations on-the-fly using integer grid hashing—no ping-pong buffers required. Cell heat accumulates across generations producing organic trails, while a spectral cosine palette maps age to vivid colour. Newly born cells flash bright cyan, and subtle grid lines and vignette add depth to the living lattice.',
+    fragmentShader: 'PrimordialGrid.frag',
+    author: 'dora',
+    tags: ['cellular-automata', 'game-of-life', 'generative', '2d', 'procedural'],
+  },
+  {
+    id: 'XDS054',
+    name: 'Spiral Nebula',
+    description: 'A procedural spiral galaxy with two logarithmic arms, hash-based star particles that concentrate along the arm density, FBM dust clouds modulated by spiral structure, and a warm yellow-white galactic core. Background stars twinkle independently, arm stars flicker at different rates, and a spectral cosine palette colors the nebular dust from warm core to cool outer hues.',
+    fragmentShader: 'SpiralNebula.frag',
+    author: 'dora',
+    tags: ['galaxy', 'spiral', 'stars', 'particle-field', '2d', 'procedural'],
+  },
 ]
