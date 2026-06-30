@@ -788,4 +788,20 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['galaxy', 'spiral', 'stars', 'particle-field', '2d', 'procedural'],
   },
+  {
+    id: 'XDS055',
+    name: 'Fractal Flame',
+    description: 'An animated IFS (Iterated Function System) fractal flame rendered via the Chaos Game. Four affine transforms with sinusoidal folds contract orbits into morphing organic forms. Log-density accumulation with a Gaussian kernel produces the classic flame glow, while a spectral cosine palette colors pixels by converged orbit position, creating shifting iridescent fractal structures that breathe and rotate over time.',
+    fragmentShader: 'FractalFlame.frag',
+    author: 'dora',
+    tags: ['fractal', 'ifs', 'flame', 'chaos-game', '2d', 'procedural'],
+  },
+  {
+    id: 'XDS056',
+    name: 'Turing Morphogenesis',
+    description: 'Stateless approximation of Gray-Scott reaction-diffusion Turing patterns. Multi-scale band-pass filtering of FBM noise with sigmoid activation mimics the activator-inhibitor dynamics that produce spots, stripes, and labyrinthine structures. Domain warping and time-varying scale weights cause the pattern to smoothly morph between regimes, while Laplacian edge detection highlights labyrinth walls with luminous glow.',
+    fragmentShader: 'TuringMorphogenesis.frag',
+    author: 'dora',
+    tags: ['reaction-diffusion', 'turing', 'labyrinth', '2d', 'procedural'],
+  },
 ]

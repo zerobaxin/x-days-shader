@@ -85,6 +85,8 @@ import MoirePhantom from '../shaders/MoirePhantom.frag'
 import PlasmaMetaballs from '../shaders/PlasmaMetaballs.frag'
 import PrimordialGrid from '../shaders/PrimordialGrid.frag'
 import SpiralNebula from '../shaders/SpiralNebula.frag'
+import FractalFlame from '../shaders/FractalFlame.frag'
+import TuringMorphogenesis from '../shaders/TuringMorphogenesis.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -171,6 +173,8 @@ const shaderMap: Record<string, string> = {
   'PlasmaMetaballs.frag': PlasmaMetaballs,
   'PrimordialGrid.frag': PrimordialGrid,
   'SpiralNebula.frag': SpiralNebula,
+  'FractalFlame.frag': FractalFlame,
+  'TuringMorphogenesis.frag': TuringMorphogenesis,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
