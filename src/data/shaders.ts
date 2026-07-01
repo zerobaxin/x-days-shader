@@ -804,4 +804,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['reaction-diffusion', 'turing', 'labyrinth', '2d', 'procedural'],
   },
+  {
+    id: 'XDS057',
+    name: 'Kaleidoscopic Dream',
+    description: 'A mesmerising kaleidoscope mirror built from two overlapping rotational fold symmetries (6-fold outer, 8-fold inner) that blend across the radius. Domain-warped FBM noise fills the mirrored segments with organic detail, while a spectral cosine palette maps the warped values into shifting iridescent colour. Luminous edge highlights trace the fold seams, and a radial vignette frames the infinite mirror.',
+    fragmentShader: 'KaleidoscopicDream.frag',
+    author: 'dora',
+    tags: ['kaleidoscope', 'mirror', 'domain-warp', '2d', 'procedural'],
+  },
 ]
