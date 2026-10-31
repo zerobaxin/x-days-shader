@@ -812,4 +812,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['kaleidoscope', 'mirror', 'domain-warp', '2d', 'procedural'],
   },
+  {
+    id: 'XDS058',
+    name: 'Glitch Databend',
+    description: 'A corrupted-broadcast aesthetic. A synthetic analogue test card — colour bars, an oscilloscope trace and grey tone blocks — is torn apart by digital decay. Per-scanline row shifting databends the image, hash-reseeded hard cuts snap in violent tear bursts, and animated RGB channel separation produces chromatic fringes. Hard block-corruption flares, a travelling tear line, chroma noise and glitch-driven bit-crush posterisation complete the degraded-signal look.',
+    fragmentShader: 'GlitchDatabend.frag',
+    author: 'dora',
+    tags: ['glitch', 'databend', 'corruption', 'rgb-split', '2d', 'procedural'],
+  },
 ]

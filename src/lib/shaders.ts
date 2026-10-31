@@ -88,6 +88,7 @@ import SpiralNebula from '../shaders/SpiralNebula.frag'
 import FractalFlame from '../shaders/FractalFlame.frag'
 import TuringMorphogenesis from '../shaders/TuringMorphogenesis.frag'
 import KaleidoscopicDream from '../shaders/KaleidoscopicDream.frag'
+import GlitchDatabend from '../shaders/GlitchDatabend.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -177,6 +178,7 @@ const shaderMap: Record<string, string> = {
   'FractalFlame.frag': FractalFlame,
   'TuringMorphogenesis.frag': TuringMorphogenesis,
   'KaleidoscopicDream.frag': KaleidoscopicDream,
+  'GlitchDatabend.frag': GlitchDatabend,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
