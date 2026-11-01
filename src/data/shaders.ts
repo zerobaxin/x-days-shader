@@ -775,7 +775,7 @@ export const shaders: ShaderInfo[] = [
   {
     id: 'XDS053',
     name: 'Primordial Grid',
-    description: 'A stateless cellular automata shader that computes Conway-like Game of Life generations on-the-fly using integer grid hashing—no ping-pong buffers required. Cell heat accumulates across generations producing organic trails, while a spectral cosine palette maps age to vivid colour. Newly born cells flash bright cyan, and subtle grid lines and vignette add depth to the living lattice.',
+    description: 'A stateless cellular-automata lattice computed entirely in a single pass — no ping-pong buffers. Each generation seeds a float-only hash "primordial soup" and applies one Conway-style Life step (born on 3, survive on 2-3) to it, while cell heat accumulates forward across ten generations inside the same loop so living regions leave decaying glowing trails. A spectral cosine palette maps heat to vivid colour, newborn cells flash cyan-blue, and faint grid lines plus a vignette add depth to the living lattice.',
     fragmentShader: 'PrimordialGrid.frag',
     author: 'dora',
     tags: ['cellular-automata', 'game-of-life', 'generative', '2d', 'procedural'],
@@ -819,5 +819,13 @@ export const shaders: ShaderInfo[] = [
     fragmentShader: 'GlitchDatabend.frag',
     author: 'dora',
     tags: ['glitch', 'databend', 'corruption', 'rgb-split', '2d', 'procedural'],
+  },
+  {
+    id: 'XDS059',
+    name: 'Curl Fluid Currents',
+    description: 'A stateless fluid-dye lookalike. The velocity field is the curl of a sum of sinusoidal vortices plus a slow global swirl, making it exactly divergence-free so it reads as incompressible flow. Each pixel is advected backwards along the field in 22 Euler steps sampled at earlier times, tracing the streamline the dye travelled along; crossed high-frequency bands sampled at the advected coordinate get stretched into long ink filaments, with one cheap FBM pass adding micro turbulence. A spectral cosine palette, cyan-white glowing filament cores, streamline haze and a vignette finish the stirred-paint look.',
+    fragmentShader: 'CurlFluidCurrents.frag',
+    author: 'dora',
+    tags: ['fluid', 'curl-noise', 'flow-field', 'advection', '2d', 'procedural'],
   },
 ]
