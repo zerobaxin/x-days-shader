@@ -828,4 +828,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['fluid', 'curl-noise', 'flow-field', 'advection', '2d', 'procedural'],
   },
+  {
+    id: 'XDS060',
+    name: 'Voxel Terrain Drift',
+    description: 'A raymarched voxel world. A drifting value-noise heightfield is quantised with floor() so every column snaps to an integer block layer; the camera flies forward and sways through it, marching the ray with growing step sizes and polishing each hit with seven bisection passes. Normals come from finite differences of the stepped height, keeping flat block tops while beveling the column edges. Albedo bands by altitude (beach, grass, rock, snow), tints per cell by hash, and darkens the seams between blocks. Everything below sea level is flooded up to a water plane with animated ripple normals, a sun glint and a fresnel sky reflection, all fading into a fogged cloudscape with a sun disc.',
+    fragmentShader: 'VoxelTerrainDrift.frag',
+    author: 'dora',
+    tags: ['voxel', 'terrain', 'raymarching', 'heightfield', 'water', '3d', 'procedural'],
+  },
 ]

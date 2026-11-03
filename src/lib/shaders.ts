@@ -90,6 +90,7 @@ import TuringMorphogenesis from '../shaders/TuringMorphogenesis.frag'
 import KaleidoscopicDream from '../shaders/KaleidoscopicDream.frag'
 import GlitchDatabend from '../shaders/GlitchDatabend.frag'
 import CurlFluidCurrents from '../shaders/CurlFluidCurrents.frag'
+import VoxelTerrainDrift from '../shaders/VoxelTerrainDrift.frag'
 
 // Shader map for static imports
 const shaderMap: Record<string, string> = {
@@ -181,6 +182,7 @@ const shaderMap: Record<string, string> = {
   'KaleidoscopicDream.frag': KaleidoscopicDream,
   'GlitchDatabend.frag': GlitchDatabend,
   'CurlFluidCurrents.frag': CurlFluidCurrents,
+  'VoxelTerrainDrift.frag': VoxelTerrainDrift,
 }
 
 export const loadShader = async (shaderName: string): Promise<string> => {
