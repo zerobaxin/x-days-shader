@@ -836,4 +836,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['voxel', 'terrain', 'raymarching', 'heightfield', 'water', '3d', 'procedural'],
   },
+  {
+    id: 'XDS061',
+    name: 'Quasicrystal Lattice',
+    description: 'An aperiodic Penrose-like tiling built from the fat-lines trick: five families of parallel stripes 36° apart are unioned by taking their minimum distance, which traces the rhombus/star lattice of a quasicrystal — no translational repeat, exact 10-fold dihedral symmetry. The nearest-family distance drives crisp line cores, soft halo bloom and node sparkles that fire only where two families cross; the direction of the nearest family is kept so every edge is shaded against a fixed light like a cut glass facet, sweeping highlights as the tiling turns. Six finer families 30° apart are etched inside the cells for micro detail, a 4-octave FBM mottles the dark glass interior, and a slow global rotation plus a gentle r² swirl and per-family phase breathing keep the whole lattice drifting and morphing. The 10-fold rotational symmetry of the tiling is verifiable in its Fourier spectrum.',
+    fragmentShader: 'QuasicrystalLattice.frag',
+    author: 'dora',
+    tags: ['quasicrystal', 'penrose', 'aperiodic', 'tiling', 'interference', '2d', 'procedural'],
+  },
 ]
