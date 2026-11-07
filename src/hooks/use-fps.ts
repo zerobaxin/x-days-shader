@@ -6,6 +6,7 @@ export const useFPS = () => {
   const lastTimeRef = useRef(performance.now())
 
   useEffect(() => {
+    let animationId = 0
     const updateFPS = () => {
       frameCountRef.current++
       const currentTime = performance.now()
@@ -20,10 +21,10 @@ export const useFPS = () => {
         lastTimeRef.current = currentTime
       }
 
-      requestAnimationFrame(updateFPS)
+      animationId = requestAnimationFrame(updateFPS)
     }
 
-    const animationId = requestAnimationFrame(updateFPS)
+    animationId = requestAnimationFrame(updateFPS)
 
     return () => {
       cancelAnimationFrame(animationId)

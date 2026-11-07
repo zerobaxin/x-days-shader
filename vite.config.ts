@@ -28,6 +28,10 @@ export default defineConfig(({ mode }) => ({
     assetsInlineLimit: 0, // Don't inline shader files
     rollupOptions: {
       output: {
+        manualChunks: {
+          three: ['three'],
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+        },
         assetFileNames: (assetInfo) => {
           // Keep shader files in their original structure
           if (

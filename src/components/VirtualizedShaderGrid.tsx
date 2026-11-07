@@ -4,6 +4,8 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { ShaderInfo } from '../data/shaders';
 import { loadShader } from '../lib/shaders';
 
+const PAGE_SIZE = 18;
+
 interface VirtualizedShaderGridProps {
   shaders: ShaderInfo[];
   searchTerm: string;
@@ -25,7 +27,9 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
 }) => {
   const [shaderSources, setShaderSources] = useState<ShaderSourceCache>({});
   const [visibleShaders, setVisibleShaders] = useState<Set<string>>(new Set());
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Filter shaders based on search and tags
   const filteredShaders = useMemo(() => {
@@ -36,6 +40,34 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
       return matchesSearch && matchesTag;
     });
   }, [shaders, searchTerm, selectedTag]);
+
+  // Only mount a page of cards at a time; more are appended as the
+  // sentinel below approaches the viewport (see its observer effect).
+  const displayedShaders = useMemo(() => {
+    return filteredShaders.slice(0, displayCount);
+  }, [filteredShaders, displayCount]);
+
+  useEffect(() => {
+    setDisplayCount(PAGE_SIZE);
+  }, [searchTerm, selectedTag]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const pager = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setDisplayCount((count) =>
+            Math.min(count + PAGE_SIZE, filteredShaders.length)
+          );
+        }
+      },
+      { rootMargin: '600px' }
+    );
+    pager.observe(sentinel);
+    return () => pager.disconnect();
+  }, [filteredShaders.length]);
 
   // Load shader source on demand
   const loadShaderSource = useCallback(async (shaderId: string, fragmentShader: string) => {
@@ -110,7 +142,7 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
     cards?.forEach((card) => observer.observe(card));
 
     return () => observer.disconnect();
-  }, [filteredShaders, loadShaderSource]);
+  }, [displayedShaders, loadShaderSource]);
 
   // Render shader card with intersection observer
   const renderShaderCard = useCallback((shader: ShaderInfo) => {
@@ -129,9 +161,9 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
         ) : shaderData?.source ? (
           <ErrorBoundary>
             <ShaderCard
-              key={`${shader.id}-${isVisible ? 'visible' : 'hidden'}-${shaderData.source.substring(0, 50)}`}
               shader={shader}
               fragmentShaderSource={shaderData.source}
+              isActive={isVisible}
             />
           </ErrorBoundary>
         ) : (
@@ -154,8 +186,13 @@ export const VirtualizedShaderGrid: React.FC<VirtualizedShaderGridProps> = ({
   }
 
   return (
-    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {filteredShaders.map(renderShaderCard)}
-    </div>
+    <>
+      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {displayedShaders.map(renderShaderCard)}
+      </div>
+      {displayCount < filteredShaders.length && (
+        <div ref={sentinelRef} className="h-4" aria-hidden="true" />
+      )}
+    </>
   );
 }; 

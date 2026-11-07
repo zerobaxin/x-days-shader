@@ -182,14 +182,16 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     canvas.addEventListener('mouseup', handleMouseUp);
 
     // Animation loop
+    let animationId = 0;
     const animate = () => {
+      animationId = requestAnimationFrame(animate);
       if (!renderer || !scene || !camera || !material) return;
+      if (document.hidden) return;
 
       const time = clockRef.current.getElapsedTime();
       material.uniforms.iTime.value = time;
 
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
     };
 
     animate();
@@ -203,6 +205,7 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationId);
       resizeObserver?.disconnect();
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mousedown', handleMouseDown);

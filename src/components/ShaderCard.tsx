@@ -9,14 +9,28 @@ import { vertexShader } from '../lib/shaders';
 interface ShaderCardProps {
   shader: ShaderInfo;
   fragmentShaderSource: string;
+  /** When false, the render loop is fully stopped (card is off-screen). */
+  isActive?: boolean;
 }
 
-export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSource }) => {
+export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSource, isActive = true }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const clockRef = useRef<THREE.Clock>(new THREE.Clock());
   const [webglError, setWebglError] = useState(false);
+  const activeRef = useRef(isActive);
+  const startLoopRef = useRef<(() => void) | null>(null);
+  const stopLoopRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    activeRef.current = isActive;
+    if (isActive) {
+      startLoopRef.current?.();
+    } else {
+      stopLoopRef.current?.();
+    }
+  }, [isActive]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -120,21 +134,12 @@ export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSo
 
     handleResize();
 
-    let animationId: number;
+    let animationId: number | null = null;
     let lastFrameTime = 0;
     const targetFPS = 30; // Limit preview cards to 30 FPS
     const frameInterval = 1000 / targetFPS;
 
-    const animate = () => {
-      if (!renderer || !scene || !camera || !material) return;
-
-      const currentTime = performance.now();
-      if (currentTime - lastFrameTime < frameInterval) {
-        animationId = requestAnimationFrame(animate);
-        return;
-      }
-
-      lastFrameTime = currentTime;
+    const renderFrame = () => {
       const time = clockRef.current.getElapsedTime();
       material.uniforms.iTime.value = time;
 
@@ -143,17 +148,51 @@ export const ShaderCard: React.FC<ShaderCardProps> = ({ shader, fragmentShaderSo
       } catch (error) {
         console.error(`Render error for ${shader.name}:`, error);
       }
+    };
 
+    const animate = () => {
+      animationId = requestAnimationFrame(animate);
+
+      const currentTime = performance.now();
+      if (currentTime - lastFrameTime < frameInterval) {
+        return;
+      }
+
+      lastFrameTime = currentTime;
+      renderFrame();
+    };
+
+    const startLoop = () => {
+      if (animationId !== null) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        renderFrame(); // Single still frame instead of an animated preview
+        return;
+      }
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    const stopLoop = () => {
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    };
+
+    startLoopRef.current = startLoop;
+    stopLoopRef.current = stopLoop;
+    if (activeRef.current) {
+      startLoop();
+    } else {
+      renderFrame();
+    }
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(canvas);
 
     return () => {
-      cancelAnimationFrame(animationId);
+      stopLoop();
+      if (startLoopRef.current === startLoop) startLoopRef.current = null;
+      if (stopLoopRef.current === stopLoop) stopLoopRef.current = null;
       resizeObserver.disconnect();
       renderer?.dispose();
       geometry.dispose();
