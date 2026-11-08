@@ -8,7 +8,6 @@ import { ArrowLeft, Home } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useFPS } from '../hooks/use-fps';
 import { loadShader } from '../lib/shaders';
-import testVideo from '../assets/video/shader_test.mp4';
 
 const ShaderViewContent: React.FC = () => {
   const { shaderId } = useParams<{ shaderId: string }>();
@@ -39,9 +38,11 @@ const ShaderViewContent: React.FC = () => {
       }
     };
 
-    // Load video if shader requires it
+    // Load the (11 MB) video only for shaders that actually require it
     if (shader.requiresVideo) {
-      setVideoSrc(testVideo);
+      import('../assets/video/shader_test.mp4')
+        .then((m) => setVideoSrc(m.default))
+        .catch((error) => console.error('Failed to load video:', error));
     } else {
       setVideoSrc('');
     }
