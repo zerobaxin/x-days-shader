@@ -844,4 +844,12 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['quasicrystal', 'penrose', 'aperiodic', 'tiling', 'interference', '2d', 'procedural'],
   },
+  {
+    id: 'XDS062',
+    name: 'Chladni Cymatics',
+    description: 'Sound made visible. A centre-clamped square plate resonating in a Chladni mode is displaced by two crossed standing waves, F = cos(nπx)cos(mπy) − cos(mπx)cos(nπy), with a circular-plate radial mode superposed on top. Sand sprinkled on the plate is flung off the antinodes and settles on the nodal lines where the surface stands still, tracing the classic Chladni figures. Ridge width is kept constant by measuring the true distance to the zero set (|F| / |∇F| via central differences), the same gradient doubles as a surface normal for a bevel and specular sweep, and per-cell hash jitter makes the grain sparkle like powder. The mode numbers drift continuously so the plate glides from one resonance to the next and the sand crawls and re-settles, over a brushed-metal plate with an acoustic bloom and vignette.',
+    fragmentShader: 'ChladniCymatics.frag',
+    author: 'dora',
+    tags: ['chladni', 'cymatics', 'standing-wave', 'interference', 'nodal-lines', '2d', 'procedural'],
+  },
 ]
