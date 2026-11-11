@@ -852,4 +852,13 @@ export const shaders: ShaderInfo[] = [
     author: 'dora',
     tags: ['chladni', 'cymatics', 'standing-wave', 'interference', 'nodal-lines', '2d', 'procedural'],
   },
+  {
+    id: 'XDS063',
+    name: 'Neon Circuitry',
+    description:
+      'A living printed circuit board grown procedurally in a single stateless pass. Jittered lattice nodes are joined by Manhattan (L-shaped) copper routes whenever a hash of the unordered cell pair passes a density test — axis-aligned neighbours far more often than diagonals, which gives the layout its PCB signature. Endpoints are canonically sorted so the pixels on either side of a cell boundary solve for exactly the same segment, leaving no seams. Cyan, magenta and amber nets glow under additive bloom while two travelling data signals per trace ride the route arc-length coordinate, gold vias with a fake upper-left light sit on every node, and sparse silkscreen component footprints, a slow scanning band and a vignette finish the board.',
+    fragmentShader: 'NeonCircuitry.frag',
+    author: 'dora',
+    tags: ['circuit', 'pcb', 'neon', 'procedural', '2d'],
+  },
 ]
